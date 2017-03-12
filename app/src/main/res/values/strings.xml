@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ImageSearch</string>
+    <string name="favorites">Favorites</string>
+    <string name="search_results">Search results</string>
+</resources>
