@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String searchType = "image";
     private ArrayList<SearchImage> mPictList;
     private RecyclerView vRecyclerView;
+    String url;
 
 
     @Override
@@ -73,8 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         vEtSearhQuery = (EditText) findViewById(R.id.et_search);
         vIvStartSearch = (ImageView) findViewById(R.id.iv_start_search);
         vIvStartSearch.setOnClickListener(this);
-        vSearchProgress = (ProgressBar) findViewById(R.id.pbDownloadProgress);
-        mPager = (ViewPager) findViewById(R.id.pager);
+              mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
     }
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         String query = vEtSearhQuery.getText().toString();
-        String url = "https://www.googleapis.com/customsearch/v1?key="
+        url = "https://www.googleapis.com/customsearch/v1?key="
                 + KEY
                 + "&amp;cx="
                 + CX
@@ -90,25 +90,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 + query +
                 "&amp;fileType=" + fileType + "&amp;searchType=" + searchType + "&amp;alt=json";
         mPictList = new ArrayList<>();
-        new SearchTask().execute(url);
+        new SearchTask().execute();
 
     }
 
     //create async task
-    private class SearchTask extends AsyncTask<String, Void, Void> {
+    private class SearchTask extends AsyncTask<Void, Void, Void> {
+
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            vSearchProgress.setVisibility(View.VISIBLE);
-        }
+                   }
 
         @Override
-        protected Void doInBackground(String... url) {
+        protected Void doInBackground(Void... voids) {
 
             HttpHandler httpHandler = new HttpHandler();
             // Making a request to url and getting response
-            String jsonStr = httpHandler.makeServiseCall(url);
+            String jsonStr = httpHandler.makeServiceCall(url);
             Log.e(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
@@ -144,8 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            vSearchProgress.setVisibility(View.INVISIBLE);
-            SearchResultsAdapter adapter = new SearchResultsAdapter(mPictList);
+                       SearchResultsAdapter adapter = new SearchResultsAdapter(mPictList);
             vRecyclerView = (RecyclerView) findViewById(R.id.rv);
             vRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
             vRecyclerView.setAdapter(adapter);

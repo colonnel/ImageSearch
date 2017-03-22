@@ -1,6 +1,8 @@
 package com.gmail.berezin.serg.imagesearch.rest;
 
 
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +18,12 @@ public class HttpHandler {
     public HttpHandler() {
     }
 
-    public String makeServiseCall(String[] reqUrl) {
+    /**
+     * Method makes call to server and gets response
+     * @param reqUrl
+     * @return string
+     */
+    public String makeServiceCall(String reqUrl) {
         String response = null;
         try {
             URL url = new URL(reqUrl);
@@ -26,13 +33,18 @@ public class HttpHandler {
             InputStream in = new BufferedInputStream(connection.getInputStream());
             convertStreamToString(in);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return response;
     }
 
+    /**
+     * Method converts steam to string
+     * @param is
+     * @return
+     */
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
